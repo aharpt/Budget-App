@@ -8,9 +8,28 @@ const incomeRows : BudgetSectionTableRow[] = [
     createData('Income 2', "159.00", "159.00"),
 ];
 
-const expenseRows : BudgetSectionTableRow[] = [
-    createData('Expense 1', "59.00", "59.00"),
-    createData('Expense 2', "59.00", "59.00"),
+const givingRows : BudgetSectionTableRow[] = [
+    createData('Giving 1', "30.00", "30.00"),
+    createData('Giving 2', "30.00", "30.00"),
+];
+
+const savingsRows : BudgetSectionTableRow[] = [
+    createData('Saving 1', "100.00", "100.00"),
+    createData('Saving 2', "100.00", "100.00"),
+];
+
+const billsSubscriptionsRows : BudgetSectionTableRow[] = [
+    createData('Bills 1', "100.00", "100.00"),
+    createData('Bills 2', "100.00", "100.00"),
+];
+
+const spendingRows : BudgetSectionTableRow[] = [
+    createData('Spending 1', "50.00", "50.00"),
+    createData('Spending 2', "50.00", "50.00"),
+];
+
+const debtRows : BudgetSectionTableRow[] = [
+    createData('Debt 1', "50.00", "50.00"),
 ];
 
 const BudgetSection = (): JSX.Element => {
@@ -22,7 +41,19 @@ const BudgetSection = (): JSX.Element => {
                     <BudgetSectionAccordion title="Income" rows={incomeRows} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Expenses" rows={expenseRows} />
+                    <BudgetSectionAccordion title="Giving" rows={givingRows} />
+                </Box>
+                <Box sx={{margin: "15px 0 15px 0"}}>
+                    <BudgetSectionAccordion title="Savings" rows={savingsRows} />
+                </Box>
+                <Box sx={{margin: "15px 0 15px 0"}}>
+                    <BudgetSectionAccordion title="Bills & Subscriptions" rows={billsSubscriptionsRows} />
+                </Box>
+                <Box sx={{margin: "15px 0 15px 0"}}>
+                    <BudgetSectionAccordion title="Spending" rows={spendingRows} />
+                </Box>
+                <Box sx={{margin: "15px 0 15px 0"}}>
+                    <BudgetSectionAccordion title="Debt" rows={debtRows} />
                 </Box>
             </Paper>
         </>
