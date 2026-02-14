@@ -2,12 +2,14 @@ import { Accordion, AccordionSummary, Typography, AccordionDetails, Box, Button,
 import { ExpandMore } from "@mui/icons-material";
 import type { JSX } from "react";
 import BudgetSectionTable from "./BudgetSectionTable";
+import type { BudgetSectionTableRow } from "../utilities";
 
 type BudgetSectionAccordionPropType = {
     title: string;
+    rows: BudgetSectionTableRow[];
 };
 
-const BudgetSectionAccordion = ({ title }: BudgetSectionAccordionPropType): JSX.Element => {
+const BudgetSectionAccordion = ({ title, rows }: BudgetSectionAccordionPropType): JSX.Element => {
     return (
         <Accordion>
             <AccordionSummary
@@ -19,7 +21,7 @@ const BudgetSectionAccordion = ({ title }: BudgetSectionAccordionPropType): JSX.
             </AccordionSummary>
             <AccordionDetails>
                 <Box>
-                    <BudgetSectionTable />
+                    <BudgetSectionTable rows={rows} />
                 </Box>
                 <Box sx={{ mt: "15px"}}>
                     <Grid container spacing={2}>

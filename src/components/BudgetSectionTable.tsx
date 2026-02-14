@@ -1,19 +1,12 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import type { BudgetSectionTableRow } from "../utilities";
 
-function createData(
-    name: string,
-    planned: string,
-    received: string,
-) {
-    return { name, planned, received };
+
+type BudgetSectionTableProps = {
+    rows: BudgetSectionTableRow[];
 }
 
-const rows = [
-    createData('Income 1', "159.00", "159.00"),
-    createData('Income 2', "159.00", "159.00"),
-];
-
-const BudgetSectionTable = () => {
+const BudgetSectionTable = ({rows} : BudgetSectionTableProps) => {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
