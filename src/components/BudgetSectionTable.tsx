@@ -15,6 +15,7 @@ const BudgetSectionTable = ({rows} : BudgetSectionTableProps) => {
                         <TableCell>Title</TableCell>
                         <TableCell align="right">Planned&nbsp;($)</TableCell>
                         <TableCell align="right">Received&nbsp;($)</TableCell>
+                        <TableCell align="right">Date Received</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -28,6 +29,7 @@ const BudgetSectionTable = ({rows} : BudgetSectionTableProps) => {
                             </TableCell>
                             <TableCell align="right">{"$" + row.planned}</TableCell>
                             <TableCell align="right">{"$" + row.received}</TableCell>
+                            <TableCell align="right">{row.dateReceived}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
