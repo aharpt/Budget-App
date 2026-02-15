@@ -12,7 +12,7 @@ const Header = () : JSX.Element => {
 
     return (
         <>
-            <Typography component="h3" variant="h3" sx={{padding: '0 25px 15px 25px'}}>{renderDate()}</Typography>
+            <Typography component="h4" variant="h4" sx={{padding: '0 25px 5px 25px'}}>{renderDate()}</Typography>
             <Divider />
         </>
     );
