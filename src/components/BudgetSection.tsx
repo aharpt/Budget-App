@@ -1,36 +1,14 @@
 import { Box, Paper, Typography } from "@mui/material";
 import type { JSX } from "react";
 import BudgetSectionAccordion from "./BudgetSectionAccordion";
-import { createData, type BudgetSectionTableRow } from "../utilities";
-
-const incomeRows : BudgetSectionTableRow[] = [
-    createData('Income 1', "159.00", "159.00", "2026-02-01"),
-    createData('Income 2', "159.00", "159.00", "2026-02-15"),
-];
-
-const givingRows : BudgetSectionTableRow[] = [
-    createData('Giving 1', "30.00", "30.00", "2026-02-01"),
-    createData('Giving 2', "30.00", "30.00", "2026-02-15"),
-];
-
-const savingsRows : BudgetSectionTableRow[] = [
-    createData('Saving 1', "100.00", "100.00", "2026-02-01"),
-    createData('Saving 2', "100.00", "100.00", "2026-02-15"),
-];
-
-const billsSubscriptionsRows : BudgetSectionTableRow[] = [
-    createData('Bills 1', "100.00", "100.00", "2026-02-01"),
-    createData('Bills 2', "100.00", "100.00", "2026-02-15"),
-];
-
-const spendingRows : BudgetSectionTableRow[] = [
-    createData('Spending 1', "50.00", "50.00", "2026-02-01"),
-    createData('Spending 2', "50.00", "50.00", "2026-02-15"),
-];
-
-const debtRows : BudgetSectionTableRow[] = [
-    createData('Debt 1', "50.00", "50.00", "2026-02-01"),
-];
+import {
+    incomeRows,
+    givingRows,
+    savingsRows,
+    billsSubscriptionsRows,
+    spendingRows,
+    debtRows,
+} from "../utilities";
 
 const BudgetSection = (): JSX.Element => {
     return (

@@ -2,10 +2,20 @@ import { Accordion, AccordionSummary, Typography, AccordionDetails, Box, Button,
 import { ExpandMore } from "@mui/icons-material";
 import { useState, type JSX } from "react";
 import BudgetSectionTable from "./BudgetSectionTable";
-import type { BudgetSectionTableRow } from "../utilities";
+import {
+    billsSubscriptionsRows,
+    createData,
+    debtRows,
+    givingRows,
+    incomeRows,
+    savingsRows,
+    spendingRows,
+    type BudgetSectionTableRow,
+    type FinancialSectionsType
+} from "../utilities";
 
 type BudgetSectionAccordionPropType = {
-    title: string;
+    title: FinancialSectionsType;
     rows: BudgetSectionTableRow[];
 };
 
@@ -15,8 +25,41 @@ const BudgetSectionAccordion = ({ title, rows }: BudgetSectionAccordionPropType)
     const [received, setReceived] = useState("");
     const [showAddForm, setShowAddForm] = useState(false);
 
-    const addItem = () : void => {
-        
+    const addItem = (sectionType: FinancialSectionsType): void => {
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const dateReceived = `${year}-${month}-${day}`;
+        switch (sectionType) {
+            case 'Income':
+                incomeRows.push(createData(name, planned, received, dateReceived));
+                break;
+            case 'Giving':
+                givingRows.push(createData(name, planned, received, dateReceived));
+                break;
+            case 'Savings':
+                savingsRows.push(createData(name, planned, received, dateReceived));
+                break;
+            case 'Bills & Subscriptions':
+                billsSubscriptionsRows.push(createData(name, planned, received, dateReceived));
+                break;
+            case 'Spending':
+                spendingRows.push(createData(name, planned, received, dateReceived));
+                break;
+            case 'Debt':
+                debtRows.push(createData(name, planned, received, dateReceived));
+                break;
+            default:
+                break;
+        }
+
+        setName("");
+        setPlanned("");
+        setReceived("");
+        setShowAddForm(!showAddForm);
     }
 
     const renderAddForm = (): JSX.Element => {
@@ -50,7 +93,7 @@ const BudgetSectionAccordion = ({ title, rows }: BudgetSectionAccordionPropType)
                         value={received}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setReceived(e.target.value)}
                     />
-                    <Button variant="contained" size="medium" onClick={addItem}>Add</Button>
+                    <Button variant="contained" size="medium" onClick={() => addItem(title)}>Add</Button>
                 </Box>
             </Grid>
         );
