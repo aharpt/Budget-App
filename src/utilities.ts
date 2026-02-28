@@ -5,6 +5,15 @@ export type BudgetSectionTableRow = {
     dateReceived: string;
 };
 
+export type APIIncomeRow = {
+    title: string;
+    plannedAmount: string;
+    remainingAmount: string;
+    year: number;
+    month: number;
+    day: number;
+};
+
 export type FinancialSectionsType =
     "Income"                |
     "Giving"                |

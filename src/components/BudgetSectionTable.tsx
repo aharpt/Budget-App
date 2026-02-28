@@ -19,9 +19,9 @@ const BudgetSectionTable = ({rows} : BudgetSectionTableProps) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {rows.map((row, idx) => (
                         <TableRow
-                            key={row.name}
+                            key={row.name + "_" + idx}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
