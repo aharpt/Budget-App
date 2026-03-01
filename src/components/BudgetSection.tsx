@@ -21,7 +21,10 @@ async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
                     name: item.title,
                     planned: item.plannedAmount,
                     received: item.remainingAmount,
-                    dateReceived: item.year + "-" + item.month + "-" + item.day,
+                    dateReceived: 
+                        String(item.year).padStart(4, "0") +
+                        "-" + String(item.month).padStart(2, "0") +
+                        "-" + String(item.day).padStart(2, "0"),
                 };
 
                 return newItem;
