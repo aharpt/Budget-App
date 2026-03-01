@@ -13,6 +13,7 @@ import {
     type BudgetSectionTableRow,
     type FinancialSectionsType
 } from "../utilities";
+import Spinner from "./Spinner";
 
 type BudgetSectionAccordionPropType = {
     title: FinancialSectionsType;
@@ -112,7 +113,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
             <AccordionDetails>
                 {
                     isLoading ?
-                        <p>Loading...</p> :
+                        <Spinner /> :
                         <>
                             <Box>
                                 <BudgetSectionTable rows={rows} />

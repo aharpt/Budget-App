@@ -14,18 +14,21 @@ import {getIncomeByYearMonth} from "../apis/income";
 import { useQuery } from "@tanstack/react-query";
 
 async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
-        const data = (await getIncomeByYearMonth()).data;
+        return new Promise((resolve) => {
+            setTimeout(async () => {
+                const data = (await getIncomeByYearMonth()).data;
+                resolve(data.map((item : APIIncomeRow) => {
+                    const newItem : BudgetSectionTableRow = {
+                    name: item.title,
+                    planned: item.plannedAmount,
+                    received: item.remainingAmount,
+                    dateReceived: item.year + "-" + item.month + "-" + item.day,
+                };
 
-        return data.map((item : APIIncomeRow) => {
-            const newItem : BudgetSectionTableRow = {
-                name: item.title,
-                planned: item.plannedAmount,
-                received: item.remainingAmount,
-                dateReceived: item.year + "-" + item.month + "-" + item.day,
-            };
-
-            return newItem;
-        });
+                return newItem;
+            }));
+            }, 3000);
+        })
     }
 
 const BudgetSection = (): JSX.Element => {
