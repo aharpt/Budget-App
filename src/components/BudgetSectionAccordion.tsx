@@ -1,5 +1,6 @@
 import { Accordion, AccordionSummary, Typography, AccordionDetails, Box, Button, Grid, TextField } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, type JSX } from "react";
 import BudgetSectionTable from "./BudgetSectionTable";
 import {
@@ -7,12 +8,12 @@ import {
     createData,
     debtRows,
     givingRows,
-    incomeRows,
     savingsRows,
     spendingRows,
 } from "../utilities/utilities";
 import Spinner from "./Spinner";
-import type { BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
+import { setIncome } from "../apis/income";
+import type { APIIncomeRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
     title: FinancialSectionsType;
@@ -20,15 +21,35 @@ type BudgetSectionAccordionPropType = {
     isLoading: boolean;
 };
 
+async function addIncome(incomeObject: APIIncomeRow) {
+    return await setIncome(incomeObject);
+}
+
 const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
     const [name, setName] = useState("");
     const [planned, setPlanned] = useState("");
     const [received, setReceived] = useState("");
     const [showAddForm, setShowAddForm] = useState(false);
+    const queryClient = useQueryClient();
+    const today = new Date();
+
+    const incomeObject: APIIncomeRow = {
+            title: name,
+            plannedAmount: planned,
+            remainingAmount: received,
+            year: today.getFullYear(),
+            month: (today.getMonth() + 1),
+            day: today.getDate(),
+        }
+
+    const mutation = useMutation({
+            mutationFn: addIncome,
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['getIncome'] })
+            },
+        })
 
     const addItem = (sectionType: FinancialSectionsType): void => {
-        const today = new Date();
-
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
@@ -36,7 +57,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
         const dateReceived = `${year}-${month}-${day}`;
         switch (sectionType) {
             case 'Income':
-                incomeRows.push(createData(name, planned, received, dateReceived));
+                mutation.mutate(incomeObject);
                 break;
             case 'Giving':
                 givingRows.push(createData(name, planned, received, dateReceived));

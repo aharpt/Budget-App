@@ -13,25 +13,25 @@ import { useQuery } from "@tanstack/react-query";
 import type { APIIncomeRow, BudgetSectionTableRow } from "../types/types";
 
 async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
-        return new Promise((resolve) => {
-            setTimeout(async () => {
-                const data = (await getIncomeByYearMonth()).data;
-                resolve(data.map((item : APIIncomeRow) => {
-                    const newItem : BudgetSectionTableRow = {
-                    name: item.title,
-                    planned: item.plannedAmount,
-                    received: item.remainingAmount,
-                    dateReceived: 
-                        String(item.year).padStart(4, "0") +
-                        "-" + String(item.month).padStart(2, "0") +
-                        "-" + String(item.day).padStart(2, "0"),
-                };
+    return new Promise((resolve) => {
+        setTimeout(async () => {
+            const data = (await getIncomeByYearMonth()).data;
+            resolve(data.map((item : APIIncomeRow) => {
+                const newItem : BudgetSectionTableRow = {
+                name: item.title,
+                planned: item.plannedAmount,
+                received: item.remainingAmount,
+                dateReceived: 
+                    String(item.year).padStart(4, "0") +
+                    "-" + String(item.month).padStart(2, "0") +
+                    "-" + String(item.day).padStart(2, "0"),
+            };
 
-                return newItem;
-            }));
-            }, 3000);
-        })
-    }
+            return newItem;
+        }));
+        }, 3000);
+    })
+}
 
 const BudgetSection = (): JSX.Element => {
     const query = useQuery({ queryKey: ['getIncome'], queryFn: fetchIncome });
