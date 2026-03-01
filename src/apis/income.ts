@@ -1,15 +1,16 @@
 import axios from 'axios';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8080/api/v1/income/";
+const now = new Date();
+const month = now.toLocaleDateString("default", { month: "numeric"});
+const year = now.getFullYear();
 
 export const getIncomeByYearMonth = () => {
-    return axios.get(`${BASE_URL}/api/v1/income/getIncomeByYearMonth?year=2026&month=2`)
+    return axios.get(`${BASE_URL}getIncomeByYearMonth?year=${year}&month=${month}`)
     .then(function (response) {
-    // handle success
     return response?.data;
   })
   .catch(function (error) {
-    // handle error
-    console.error("Error:" + error);
+    console.error("Error: " + error);
   });
 }
