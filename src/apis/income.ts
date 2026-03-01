@@ -5,12 +5,6 @@ const now = new Date();
 const month = now.toLocaleDateString("default", { month: "numeric"});
 const year = now.getFullYear();
 
-export const getIncomeByYearMonth = () => {
-    return axios.get(`${BASE_URL}getIncomeByYearMonth?year=${year}&month=${month}`)
-    .then(function (response) {
-    return response?.data;
-  })
-  .catch(function (error) {
-    console.error("Error: " + error);
-  });
+export const getIncomeByYearMonth = async () => {
+    return await axios.get(`${BASE_URL}getIncomeByYearMonth?year=${year}&month=${month}`);
 }

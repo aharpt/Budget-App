@@ -17,9 +17,10 @@ import {
 type BudgetSectionAccordionPropType = {
     title: FinancialSectionsType;
     rows: BudgetSectionTableRow[];
+    isLoading: boolean;
 };
 
-const BudgetSectionAccordion = ({ title, rows }: BudgetSectionAccordionPropType): JSX.Element => {
+const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
     const [name, setName] = useState("");
     const [planned, setPlanned] = useState("");
     const [received, setReceived] = useState("");
@@ -109,18 +110,25 @@ const BudgetSectionAccordion = ({ title, rows }: BudgetSectionAccordionPropType)
                 <Typography component="span">{title}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-                <Box>
-                    <BudgetSectionTable rows={rows} />
-                </Box>
-                <Box sx={{ mt: "15px" }}>
-                    <Grid container spacing={2}>
-                        <Grid size={10} />
-                        <Grid size={2} sx={{ display: "flex" }}>
-                            <Button variant="contained" sx={{ marginLeft: "auto" }} onClick={() => setShowAddForm(!showAddForm)}>{showAddForm ? "Close" : "Add Item"}</Button>
-                        </Grid>
-                        {showAddForm ? renderAddForm() : <></>}
-                    </Grid>
-                </Box>
+                {
+                    isLoading ?
+                        <p>Loading...</p> :
+                        <>
+                            <Box>
+                                <BudgetSectionTable rows={rows} />
+                            </Box>
+                            <Box sx={{ mt: "15px" }}>
+                                <Grid container spacing={2}>
+                                    <Grid size={10} />
+                                    <Grid size={2} sx={{ display: "flex" }}>
+                                        <Button variant="contained" sx={{ marginLeft: "auto" }} onClick={() => setShowAddForm(!showAddForm)}>{showAddForm ? "Close" : "Add Item"}</Button>
+                                    </Grid>
+                                    {showAddForm ? renderAddForm() : <></>}
+                                </Grid>
+                            </Box>
+                        </>
+                }
+
             </AccordionDetails>
         </Accordion>
     );

@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { useEffect, useState, type JSX } from "react";
+import { type JSX } from "react";
 import BudgetSectionAccordion from "./BudgetSectionAccordion";
 import {
     givingRows,
@@ -11,50 +11,46 @@ import {
     type APIIncomeRow,
 } from "../utilities";
 import {getIncomeByYearMonth} from "../apis/income";
+import { useQuery } from "@tanstack/react-query";
+
+async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
+        const data = (await getIncomeByYearMonth()).data;
+
+        return data.map((item : APIIncomeRow) => {
+            const newItem : BudgetSectionTableRow = {
+                name: item.title,
+                planned: item.plannedAmount,
+                received: item.remainingAmount,
+                dateReceived: item.year + "-" + item.month + "-" + item.day,
+            };
+
+            return newItem;
+        });
+    }
 
 const BudgetSection = (): JSX.Element => {
-    const [incomeData, setIncomeData] = useState<BudgetSectionTableRow[]>([]);
-
-    useEffect(() => {
-        async function fetchData() {
-            const data : Array<APIIncomeRow> = await getIncomeByYearMonth();
-
-            data.forEach(item => {
-                const newItem : BudgetSectionTableRow = {
-                    name: item.title,
-                    planned: item.plannedAmount,
-                    received: item.remainingAmount,
-                    dateReceived: item.year + "-" + item.month + "-" + item.day,
-                };
-
-                setIncomeData(data => [...data, newItem]);
-            });
-        }
-
-        fetchData();
-    }, []);
-
+    const query = useQuery({ queryKey: ['getIncome'], queryFn: fetchIncome });
     return (
         <>
             <Paper elevation={3} sx={{padding: "25px 15px 15px 15px"}}>
                 <Typography component="h5" variant="h5" sx={{mb: "15px"}}>My Finances</Typography>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Income" rows={incomeData || []} />
+                    <BudgetSectionAccordion title="Income" rows={query.data || []} isLoading={query.isLoading || query.isFetching} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Giving" rows={givingRows} />
+                    <BudgetSectionAccordion title="Giving" rows={givingRows} isLoading={false} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Savings" rows={savingsRows} />
+                    <BudgetSectionAccordion title="Savings" rows={savingsRows} isLoading={false} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Bills & Subscriptions" rows={billsSubscriptionsRows} />
+                    <BudgetSectionAccordion title="Bills & Subscriptions" rows={billsSubscriptionsRows} isLoading={false} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Spending" rows={spendingRows} />
+                    <BudgetSectionAccordion title="Spending" rows={spendingRows} isLoading={false} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Debt" rows={debtRows} />
+                    <BudgetSectionAccordion title="Debt" rows={debtRows} isLoading={false} />
                 </Box>
             </Paper>
         </>
