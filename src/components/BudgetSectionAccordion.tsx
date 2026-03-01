@@ -10,10 +10,9 @@ import {
     incomeRows,
     savingsRows,
     spendingRows,
-    type BudgetSectionTableRow,
-    type FinancialSectionsType
-} from "../utilities";
+} from "../utilities/utilities";
 import Spinner from "./Spinner";
+import type { BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
     title: FinancialSectionsType;

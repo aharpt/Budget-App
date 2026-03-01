@@ -1,5 +1,5 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import type { BudgetSectionTableRow } from "../utilities";
+import type { BudgetSectionTableRow } from "../types/types";
 
 
 type BudgetSectionTableProps = {

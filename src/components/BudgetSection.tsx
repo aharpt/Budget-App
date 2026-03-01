@@ -7,11 +7,10 @@ import {
     billsSubscriptionsRows,
     spendingRows,
     debtRows,
-    type BudgetSectionTableRow,
-    type APIIncomeRow,
-} from "../utilities";
+} from "../utilities/utilities";
 import {getIncomeByYearMonth} from "../apis/income";
 import { useQuery } from "@tanstack/react-query";
+import type { APIIncomeRow, BudgetSectionTableRow } from "../types/types";
 
 async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
         return new Promise((resolve) => {
