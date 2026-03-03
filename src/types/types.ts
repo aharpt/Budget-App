@@ -8,7 +8,7 @@ export type BudgetSectionTableRow = {
 export type APIIncomeRow = {
     title: string;
     plannedAmount: string;
-    remainingAmount: string;
+    receivedAmount: string;
     year: number;
     month: number;
     day: number;

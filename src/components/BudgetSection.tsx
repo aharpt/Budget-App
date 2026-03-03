@@ -20,7 +20,7 @@ async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
                 const newItem : BudgetSectionTableRow = {
                 name: item.title,
                 planned: item.plannedAmount,
-                received: item.remainingAmount,
+                received: item.receivedAmount,
                 dateReceived: 
                     String(item.year).padStart(4, "0") +
                     "-" + String(item.month).padStart(2, "0") +
@@ -29,7 +29,7 @@ async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
 
             return newItem;
         }));
-        }, 3000);
+        }, 1000);
     })
 }
 

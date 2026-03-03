@@ -36,7 +36,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
     const incomeObject: APIIncomeRow = {
             title: name,
             plannedAmount: planned,
-            remainingAmount: received,
+            receivedAmount: received,
             year: today.getFullYear(),
             month: (today.getMonth() + 1),
             day: today.getDate(),
