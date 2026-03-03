@@ -2,15 +2,15 @@ import { Box, Paper, Typography } from "@mui/material";
 import { type JSX } from "react";
 import BudgetSectionAccordion from "./BudgetSectionAccordion";
 import {
-    savingsRows,
     billsSubscriptionsRows,
     spendingRows,
     debtRows,
 } from "../utilities/utilities";
 import {getIncomeByYearMonth} from "../apis/income";
+import { getGivingByYearMonth } from "../apis/giving";
+import { getSavingsByYearMonth } from "../apis/savings";
 import { useQuery } from "@tanstack/react-query";
 import type { APIBudgetRow, BudgetSectionTableRow } from "../types/types";
-import { getGivingByYearMonth } from "../apis/giving";
 
 async function fetchIncome() : Promise<BudgetSectionTableRow[]> {
     return new Promise((resolve) => {
@@ -54,9 +54,31 @@ async function fetchGiving() : Promise<BudgetSectionTableRow[]> {
     })
 }
 
+async function fetchSavings() : Promise<BudgetSectionTableRow[]> {
+    return new Promise((resolve) => {
+        setTimeout(async () => {
+            const data = (await getSavingsByYearMonth()).data;
+            resolve(data.map((item : APIBudgetRow) => {
+                const newItem : BudgetSectionTableRow = {
+                name: item.title,
+                planned: item.plannedAmount,
+                received: item.receivedAmount,
+                dateReceived: 
+                    String(item.year).padStart(4, "0") +
+                    "-" + String(item.month).padStart(2, "0") +
+                    "-" + String(item.day).padStart(2, "0"),
+            };
+
+            return newItem;
+        }));
+        }, 1000);
+    })
+}
+
 const BudgetSection = (): JSX.Element => {
     const incomeQuery = useQuery({ queryKey: ['getIncome'], queryFn: fetchIncome });
     const givingQuery = useQuery( { queryKey: ['getGiving'], queryFn: fetchGiving });
+    const savingsQuery = useQuery( { queryKey: ['getSavings'], queryFn: fetchSavings });
 
     return (
         <>
@@ -69,7 +91,7 @@ const BudgetSection = (): JSX.Element => {
                     <BudgetSectionAccordion title="Giving" rows={givingQuery.data || []} isLoading={givingQuery.isLoading || givingQuery.isFetching} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
-                    <BudgetSectionAccordion title="Savings" rows={savingsRows} isLoading={false} />
+                    <BudgetSectionAccordion title="Savings" rows={savingsQuery.data || []} isLoading={savingsQuery.isLoading || savingsQuery.isFetching} />
                 </Box>
                 <Box sx={{margin: "15px 0 15px 0"}}>
                     <BudgetSectionAccordion title="Bills & Subscriptions" rows={billsSubscriptionsRows} isLoading={false} />

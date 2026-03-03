@@ -7,12 +7,12 @@ import {
     billsSubscriptionsRows,
     createData,
     debtRows,
-    savingsRows,
     spendingRows,
 } from "../utilities/utilities";
 import Spinner from "./Spinner";
 import { setIncome } from "../apis/income";
 import { setGiving } from "../apis/giving";
+import { setSavings } from "../apis/savings";
 import type { APIBudgetRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
@@ -27,6 +27,10 @@ async function addIncome(incomeObject: APIBudgetRow) {
 
 async function addGiving(givingObject: APIBudgetRow) {
     return await setGiving(givingObject);
+}
+
+async function addSavings(savingsObject: APIBudgetRow) {
+    return await setSavings(savingsObject);
 }
 
 const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
@@ -51,14 +55,21 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['getIncome'] })
         },
-    })
+    });
 
     const givingMutation = useMutation({
         mutationFn: addGiving,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['getGiving'] })
         },
-    })
+    });
+
+    const savingsMutation = useMutation({
+        mutationFn: addSavings,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['getSavings'] })
+        },
+    });
 
     const addItem = (sectionType: FinancialSectionsType): void => {
         const year = today.getFullYear();
@@ -74,7 +85,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
                 givingMutation.mutate(budgetObject);
                 break;
             case 'Savings':
-                savingsRows.push(createData(name, planned, received, dateReceived));
+                savingsMutation.mutate(budgetObject);
                 break;
             case 'Bills & Subscriptions':
                 billsSubscriptionsRows.push(createData(name, planned, received, dateReceived));

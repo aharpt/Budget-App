@@ -10,6 +10,6 @@ export const getGivingByYearMonth = async () => {
     return await axios.get(`${BASE_URL}getGivingByYearMonth?year=${year}&month=${month}`);
 }
 
-export const setGiving = async (income : APIBudgetRow) => {
-    return await axios.post(`${BASE_URL}setGiving`, income);
+export const setGiving = async (giving : APIBudgetRow) => {
+    return await axios.post(`${BASE_URL}setGiving`, giving);
 }
