@@ -5,7 +5,7 @@ export type BudgetSectionTableRow = {
     dateReceived: string;
 };
 
-export type APIIncomeRow = {
+export type APIBudgetRow = {
     title: string;
     plannedAmount: string;
     receivedAmount: string;

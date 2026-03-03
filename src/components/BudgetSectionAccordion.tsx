@@ -7,13 +7,13 @@ import {
     billsSubscriptionsRows,
     createData,
     debtRows,
-    givingRows,
     savingsRows,
     spendingRows,
 } from "../utilities/utilities";
 import Spinner from "./Spinner";
 import { setIncome } from "../apis/income";
-import type { APIIncomeRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
+import { setGiving } from "../apis/giving";
+import type { APIBudgetRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
     title: FinancialSectionsType;
@@ -21,8 +21,12 @@ type BudgetSectionAccordionPropType = {
     isLoading: boolean;
 };
 
-async function addIncome(incomeObject: APIIncomeRow) {
+async function addIncome(incomeObject: APIBudgetRow) {
     return await setIncome(incomeObject);
+}
+
+async function addGiving(givingObject: APIBudgetRow) {
+    return await setGiving(givingObject);
 }
 
 const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
@@ -33,7 +37,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
     const queryClient = useQueryClient();
     const today = new Date();
 
-    const incomeObject: APIIncomeRow = {
+    const budgetObject: APIBudgetRow = {
             title: name,
             plannedAmount: planned,
             receivedAmount: received,
@@ -42,12 +46,19 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
             day: today.getDate(),
         }
 
-    const mutation = useMutation({
-            mutationFn: addIncome,
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['getIncome'] })
-            },
-        })
+    const incomeMutation = useMutation({
+        mutationFn: addIncome,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['getIncome'] })
+        },
+    })
+
+    const givingMutation = useMutation({
+        mutationFn: addGiving,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['getGiving'] })
+        },
+    })
 
     const addItem = (sectionType: FinancialSectionsType): void => {
         const year = today.getFullYear();
@@ -57,10 +68,10 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
         const dateReceived = `${year}-${month}-${day}`;
         switch (sectionType) {
             case 'Income':
-                mutation.mutate(incomeObject);
+                incomeMutation.mutate(budgetObject);
                 break;
             case 'Giving':
-                givingRows.push(createData(name, planned, received, dateReceived));
+                givingMutation.mutate(budgetObject);
                 break;
             case 'Savings':
                 savingsRows.push(createData(name, planned, received, dateReceived));
