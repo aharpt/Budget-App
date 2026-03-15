@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, type JSX } from "react";
 import BudgetSectionTable from "./BudgetSectionTable";
 import {
-    billsSubscriptionsRows,
     createData,
     debtRows,
     spendingRows,
@@ -13,6 +12,7 @@ import Spinner from "./Spinner";
 import { setIncome } from "../apis/income";
 import { setGiving } from "../apis/giving";
 import { setSavings } from "../apis/savings";
+import { setSubscriptions } from "../apis/subscriptions";
 import type { APIBudgetRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
@@ -31,6 +31,10 @@ async function addGiving(givingObject: APIBudgetRow) {
 
 async function addSavings(savingsObject: APIBudgetRow) {
     return await setSavings(savingsObject);
+}
+
+async function addSubscription(subscriptionObject : APIBudgetRow) {
+    return await setSubscriptions(subscriptionObject);
 }
 
 const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
@@ -71,6 +75,13 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
         },
     });
 
+    const subscriptionsMutation = useMutation({
+        mutationFn: addSubscription,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['getSubscriptions'] })
+        },
+    });
+
     const addItem = (sectionType: FinancialSectionsType): void => {
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -88,7 +99,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
                 savingsMutation.mutate(budgetObject);
                 break;
             case 'Bills & Subscriptions':
-                billsSubscriptionsRows.push(createData(name, planned, received, dateReceived));
+                subscriptionsMutation.mutate(budgetObject);
                 break;
             case 'Spending':
                 spendingRows.push(createData(name, planned, received, dateReceived));
