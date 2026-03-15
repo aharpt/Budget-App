@@ -6,7 +6,15 @@ import {
 } from '@tanstack/react-query'
 
 function App() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: Infinity,
+      }
+    }
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
