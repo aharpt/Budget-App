@@ -6,13 +6,13 @@ import BudgetSectionTable from "./BudgetSectionTable";
 import {
     createData,
     debtRows,
-    spendingRows,
 } from "../utilities/utilities";
 import Spinner from "./Spinner";
 import { setIncome } from "../apis/income";
 import { setGiving } from "../apis/giving";
 import { setSavings } from "../apis/savings";
 import { setSubscriptions } from "../apis/subscriptions";
+import { setSpending } from "../apis/spending";
 import type { APIBudgetRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
@@ -35,6 +35,10 @@ async function addSavings(savingsObject: APIBudgetRow) {
 
 async function addSubscription(subscriptionObject : APIBudgetRow) {
     return await setSubscriptions(subscriptionObject);
+}
+
+async function addSpending(spendingObject : APIBudgetRow) {
+    return await setSpending(spendingObject);
 }
 
 const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
@@ -82,6 +86,13 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
         },
     });
 
+    const spendingMutation = useMutation({
+        mutationFn: addSpending,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['getSpending'] })
+        },
+    });
+
     const addItem = (sectionType: FinancialSectionsType): void => {
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -102,7 +113,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
                 subscriptionsMutation.mutate(budgetObject);
                 break;
             case 'Spending':
-                spendingRows.push(createData(name, planned, received, dateReceived));
+                spendingMutation.mutate(budgetObject);
                 break;
             case 'Debt':
                 debtRows.push(createData(name, planned, received, dateReceived));
