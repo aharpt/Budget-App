@@ -3,16 +3,13 @@ import { ExpandMore } from "@mui/icons-material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, type JSX } from "react";
 import BudgetSectionTable from "./BudgetSectionTable";
-import {
-    createData,
-    debtRows,
-} from "../utilities/utilities";
 import Spinner from "./Spinner";
 import { setIncome } from "../apis/income";
 import { setGiving } from "../apis/giving";
 import { setSavings } from "../apis/savings";
 import { setSubscriptions } from "../apis/subscriptions";
 import { setSpending } from "../apis/spending";
+import { setDebt } from "../apis/debt";
 import type { APIBudgetRow, BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 type BudgetSectionAccordionPropType = {
@@ -39,6 +36,10 @@ async function addSubscription(subscriptionObject : APIBudgetRow) {
 
 async function addSpending(spendingObject : APIBudgetRow) {
     return await setSpending(spendingObject);
+}
+
+async function addDebt(debtObject : APIBudgetRow) {
+    return await setDebt(debtObject);
 }
 
 const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordionPropType): JSX.Element => {
@@ -93,12 +94,14 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
         },
     });
 
-    const addItem = (sectionType: FinancialSectionsType): void => {
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
+    const debtMutation = useMutation({
+        mutationFn: addDebt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['getDebt'] })
+        },
+    });
 
-        const dateReceived = `${year}-${month}-${day}`;
+    const addItem = (sectionType: FinancialSectionsType): void => {
         switch (sectionType) {
             case 'Income':
                 incomeMutation.mutate(budgetObject);
@@ -116,7 +119,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
                 spendingMutation.mutate(budgetObject);
                 break;
             case 'Debt':
-                debtRows.push(createData(name, planned, received, dateReceived));
+                debtMutation.mutate(budgetObject);
                 break;
             default:
                 break;
