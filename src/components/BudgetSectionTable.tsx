@@ -1,19 +1,25 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import type { BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
-function createData(
-    name: string,
-    planned: string,
-    received: string,
-) {
-    return { name, planned, received };
+
+type BudgetSectionTableProps = {
+    rows: BudgetSectionTableRow[];
+    type: FinancialSectionsType;
 }
 
-const rows = [
-    createData('Income 1', "159.00", "159.00"),
-    createData('Income 2', "159.00", "159.00"),
-];
+const BudgetSectionTable = ({rows, type} : BudgetSectionTableProps) => {
 
-const BudgetSectionTable = () => {
+    const renderAmountTableCell = () => {
+        switch (type) {
+            case 'Income':
+                return "Received";
+            case 'Debt':
+                return "Paid so Far";
+            default:
+                return "Remaining";
+        }
+    }
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -21,13 +27,14 @@ const BudgetSectionTable = () => {
                     <TableRow>
                         <TableCell>Title</TableCell>
                         <TableCell align="right">Planned&nbsp;($)</TableCell>
-                        <TableCell align="right">Received&nbsp;($)</TableCell>
+                        <TableCell align="right">{renderAmountTableCell()}&nbsp;($)</TableCell>
+                        <TableCell align="right">Date Received</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {rows.map((row, idx) => (
                         <TableRow
-                            key={row.name}
+                            key={row.name + "_" + idx}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
@@ -35,6 +42,7 @@ const BudgetSectionTable = () => {
                             </TableCell>
                             <TableCell align="right">{"$" + row.planned}</TableCell>
                             <TableCell align="right">{"$" + row.received}</TableCell>
+                            <TableCell align="right">{row.dateReceived}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
