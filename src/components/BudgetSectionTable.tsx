@@ -1,12 +1,25 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import type { BudgetSectionTableRow } from "../types/types";
+import type { BudgetSectionTableRow, FinancialSectionsType } from "../types/types";
 
 
 type BudgetSectionTableProps = {
     rows: BudgetSectionTableRow[];
+    type: FinancialSectionsType;
 }
 
-const BudgetSectionTable = ({rows} : BudgetSectionTableProps) => {
+const BudgetSectionTable = ({rows, type} : BudgetSectionTableProps) => {
+
+    const renderAmountTableCell = () => {
+        switch (type) {
+            case 'Income':
+                return "Received";
+            case 'Debt':
+                return "Paid so Far";
+            default:
+                return "Remaining";
+        }
+    }
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -14,7 +27,7 @@ const BudgetSectionTable = ({rows} : BudgetSectionTableProps) => {
                     <TableRow>
                         <TableCell>Title</TableCell>
                         <TableCell align="right">Planned&nbsp;($)</TableCell>
-                        <TableCell align="right">Received&nbsp;($)</TableCell>
+                        <TableCell align="right">{renderAmountTableCell()}&nbsp;($)</TableCell>
                         <TableCell align="right">Date Received</TableCell>
                     </TableRow>
                 </TableHead>

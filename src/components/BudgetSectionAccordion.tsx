@@ -183,7 +183,7 @@ const BudgetSectionAccordion = ({ title, rows, isLoading }: BudgetSectionAccordi
                         <Spinner /> :
                         <>
                             <Box>
-                                <BudgetSectionTable rows={rows} />
+                                <BudgetSectionTable rows={rows} type={title} />
                             </Box>
                             <Box sx={{ mt: "15px" }}>
                                 <Grid container spacing={2}>
